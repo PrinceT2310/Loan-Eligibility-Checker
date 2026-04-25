@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import Logo from "../components/Logo";
 
 export default function Home() {
 
@@ -43,12 +44,9 @@ export default function Home() {
 
                 <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
 
-                    <h1
-                        className="text-2xl font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
-                        onClick={() => navigate("/")}
-                    >
-                        LoanCheck
-                    </h1>
+                    <div onClick={() => navigate("/")} className="cursor-pointer">
+                        <Logo size="md" />
+                    </div>
 
                     <div className="hidden md:flex gap-8 text-gray-700 dark:text-gray-300 font-medium">
 
@@ -268,7 +266,7 @@ export default function Home() {
 
                     <div>
                         <h3 className="text-white font-bold text-lg mb-3">
-                            Loan Eligibility Checker
+                            Score2Loan
                         </h3>
                         <p className="text-sm">
                             Compare loans from top banks and NBFCs instantly.
@@ -306,7 +304,7 @@ export default function Home() {
                 </div>
 
                 <div className="text-center border-t border-gray-700 py-4 text-sm">
-                    © {new Date().getFullYear()} Loan Eligibility Checker. All rights reserved.
+                    © {new Date().getFullYear()} Score2Loan All rights reserved.
                 </div>
 
             </footer>

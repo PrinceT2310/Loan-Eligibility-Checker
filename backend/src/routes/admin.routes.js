@@ -6,10 +6,7 @@ import { getAdminStats } from "../controllers/admin.controller.js";
 const router = express.Router();
 
 router.get(
-  "/stats",
-  authMiddleware,
-  adminMiddleware,
-  getAdminStats
+  "/stats",authMiddleware,adminMiddleware, getAdminStats
 );
 
 export default router;

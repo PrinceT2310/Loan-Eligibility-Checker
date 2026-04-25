@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import api from "../utils/api";
+import toast from "react-hot-toast";
 
 export default function AdminApplications() {
 
     const [apps, setApps] = useState([]);
 
     const fetchApps = async () => {
-        const res = await api.get("/applications");
-        setApps(res.data);
+        try {
+            const res = await api.get("/applications");
+            setApps(res.data);
+        } catch (error) {
+            console.error("Failed to fetch applications:", error);
+            // Phase 2 mein toast lagaenge
+        }
     };
 
     useEffect(() => {
@@ -15,8 +21,13 @@ export default function AdminApplications() {
     }, []);
 
     const updateStatus = async (id, status) => {
-        await api.put(`/applications/${id}/status`, { status });
-        fetchApps();
+        try {
+            await api.put(`/applications/${id}/status`, { status });
+            toast.success(`Application ${status.toLowerCase()} successfully!`);
+            fetchApps();
+        } catch (error) {
+            toast.error("Status update failed. Try again.");
+        }
     };
 
     return (
@@ -44,7 +55,7 @@ export default function AdminApplications() {
 
 
 
-                
+
                     {/* Buttons */}
                     {/* <div className="mt-3">
 

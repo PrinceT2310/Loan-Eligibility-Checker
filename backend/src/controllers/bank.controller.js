@@ -58,6 +58,6 @@ export const deleteBank = async (req, res) => {
         res.json({message: "Bank Delete Successfully"});
     }
     catch(error){
-        req.status(500).json({message: error.message});
+        res.status(500).json({message: error.message});
     }
 } 

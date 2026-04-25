@@ -1,6 +1,8 @@
 import { useState } from "react";
 import api from "../utils/api";
 import { useNavigate, Link } from "react-router-dom";
+import Logo from "../components/Logo";
+import toast from "react-hot-toast";
 
 export default function Register() {
 
@@ -31,12 +33,12 @@ export default function Register() {
                 password: form.password
             });
 
-            alert("Account created successfully");
+            toast.success("Account created! Please login.");
 
             navigate("/login");
 
         } catch (err) {
-            alert(err.response?.data?.message || "Registration failed");
+           toast.error(err.response?.data?.message || "Registration failed");
         }
     };
 
@@ -50,9 +52,9 @@ export default function Register() {
 
                 <div className="max-w-md text-center">
 
-                    <h1 className="text-4xl font-bold mb-6">
-                        Join Loan Eligibility Checker
-                    </h1>
+                    <div className="mb-6">
+                        <Logo size="lg" dark={true} />
+                    </div>
 
                     <p className="text-lg opacity-90">
                         Create your account and start checking loan eligibility

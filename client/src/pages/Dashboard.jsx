@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import Logo from "../components/Logo";
 
 export default function Dashboard() {
 
@@ -82,8 +83,8 @@ export default function Dashboard() {
 
                 <div>
 
-                    <div className="p-6 text-2xl font-bold text-blue-600 dark:text-blue-400">
-                        LoanCheck
+                    <div className="p-6">
+                        <Logo size="md" />
                     </div>
 
                     <nav className="flex flex-col gap-2 p-4">

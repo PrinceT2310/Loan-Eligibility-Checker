@@ -1,83 +1,9 @@
-// import { useContext, useState } from "react";
-// import { AuthContext } from "../context/AuthContext";
-// import { useNavigate, Link } from "react-router-dom";
-// // Assuming you have an api instance defined in a file like 'src/api.js'
-// import api from "../utils/api.js";
-
-// export default function Login() {
-
-//     const { setUser } = useContext(AuthContext);
-//     const navigate = useNavigate();
-
-//     const [email, setEmail] = useState("");
-//     const [password, setPassword] = useState("");
-
-//     const handleLogin = async (e) => {
-//         e.preventDefault();
-
-//         try {
-//             const res = await api.post("/auth/login", { email, password });
-
-//             //Store Token:
-//             localStorage.setItem("token", res.data.token);
-
-//             setUser(res.data.user);
-
-//             Promise.resolve().then(() => {
-//                 navigate("/");
-//             });
-//         }
-//         catch (error) {
-//             alert(error.response?.data?.message || "Login failed");
-//         };
-//     };
-
-
-//     return (
-//         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-//             <form
-//                 onSubmit={handleLogin}
-//                 className="bg-white p-8 rounded shadow w-96"
-//             >
-//                 <h2 className="text-2xl font-bold mb-4"> Login </h2>
-//                 <input
-//                     type="email"
-//                     placeholder="Email"
-//                     className="w-full p-2 border mb-4 "
-//                     value={email}
-//                     onChange={(e) => setEmail(e.target.value)}
-//                 />
-//                 <input
-//                     type="password"
-//                     placeholder="Password"
-//                     className="w-full p-2 border mb-4 "
-//                     value={password}
-//                     onChange={(e) => setPassword(e.target.value)}
-//                 />
-//                 <button className="w-full bg-blue-500 text-white p-2 rounded">
-//                     Login
-//                 </button>
-
-//                 <div className="mt-4 text-center">
-//                     <p className="text-sm text-gray-600">
-//                         Don't have an account?{" "}
-//                         <Link to="/register" className="text-blue-500 hover:underline">
-//                             Register
-//                         </Link>
-//                     </p>
-//                 </div>
-//             </form>
-//         </div>
-//     )
-// }
-
-
-
-
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../utils/api.js";
+import Logo from "../components/Logo";
+import toast from "react-hot-toast";
 
 export default function Login() {
 
@@ -99,7 +25,7 @@ export default function Login() {
 
             navigate("/");
         } catch (error) {
-            alert(error.response?.data?.message || "Login failed");
+            toast.error(error.response?.data?.message || "Login failed");
         }
     };
 
@@ -112,9 +38,9 @@ export default function Login() {
 
                 <div className="max-w-md text-center">
 
-                    <h1 className="text-4xl font-bold mb-6">
-                        Loan Eligibility Checker
-                    </h1>
+                    <div className="mb-6">
+                        <Logo size="lg" dark={true} />
+                    </div>
 
                     <p className="text-lg opacity-90">
                         Check your loan eligibility instantly and compare offers

@@ -1,116 +1,8 @@
-// import { useEffect, useState } from "react";
-// import api from "../utils/api";
-// import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
-
-// export default function AdminDashboard() {
-
-//     const [stats, setStats] = useState({
-//         total: 0,
-//         approved: 0,
-//         rejected: 0,
-//         pending: 0
-//     });
-
-//     const chartData = [
-//         { name: "Approved", value: stats.approved },
-//         { name: "Rejected", value: stats.rejected },
-//         { name: "Pending", value: stats.pending }
-//     ];
-
-//     const COLORS = ["#22c55e", "#ef4444", "#facc15"];
-
-//     useEffect(() => {
-
-//         const fetchStats = async () => {
-
-//             const res = await api.get("/admin/stats");
-
-//             setStats(res.data);
-
-//         };
-
-//         fetchStats();
-
-//     }, []);
-
-//     return (
-
-//         <div className="p-10 bg-gray-100 min-h-screen">
-
-//             <h1 className="text-3xl font-bold mb-8">
-//                 Admin Analytics
-//             </h1>
-
-//             <div className="grid md:grid-cols-4 gap-6">
-
-//                 <div className="bg-white p-6 rounded shadow text-center">
-//                     <p className="text-gray-500">Total Applications</p>
-//                     <h2 className="text-3xl font-bold">{stats.total}</h2>
-//                 </div>
-
-//                 <div className="bg-green-100 p-6 rounded shadow text-center">
-//                     <p>Approved</p>
-//                     <h2 className="text-3xl font-bold">{stats.approved}</h2>
-//                 </div>
-
-//                 <div className="bg-red-100 p-6 rounded shadow text-center">
-//                     <p>Rejected</p>
-//                     <h2 className="text-3xl font-bold">{stats.rejected}</h2>
-//                 </div>
-
-//                 <div className="bg-yellow-100 p-6 rounded shadow text-center">
-//                     <p>Pending</p>
-//                     <h2 className="text-3xl font-bold">{stats.pending}</h2>
-//                 </div>
-
-//             </div>
-
-//             <div className="bg-white p-8 rounded-xl shadow mt-10">
-
-//                 <h2 className="text-2xl font-bold mb-6">
-//                     Loan Status Analytics
-//                 </h2>
-
-//                 <div className="flex justify-center">
-
-//                     <PieChart width={400} height={300}>
-
-//                         <Pie
-//                             data={chartData}
-//                             cx="50%"
-//                             cy="50%"
-//                             outerRadius={100}
-//                             dataKey="value"
-//                             label
-//                         >
-
-//                             {chartData.map((entry, index) => (
-//                                 <Cell key={`cell-${index}`} fill={COLORS[index]} />
-//                             ))}
-
-//                         </Pie>
-
-//                         <Tooltip />
-//                         <Legend />
-
-//                     </PieChart>
-
-//                 </div>
-
-//             </div>
-
-//         </div>
-
-//     );
-
-// }
-
-
-
 import { useEffect, useState } from "react";
 import api from "../utils/api";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { useNavigate } from "react-router-dom";
+import Logo from "../components/Logo";
 
 export default function AdminDashboard() {
 
@@ -158,8 +50,8 @@ export default function AdminDashboard() {
 
                 <div>
 
-                    <div className="p-6 text-2xl font-bold text-indigo-600">
-                        Admin Panel
+                    <div className="p-6">
+                        <Logo size="md" />
                     </div>
 
                     <nav className="flex flex-col gap-2 p-4">
@@ -185,7 +77,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="p-4 border-t text-sm text-gray-500">
-                    Loan Eligibility Checker
+                    Score2Loan
                 </div>
 
             </div>
@@ -289,7 +181,7 @@ export default function AdminDashboard() {
 
                         <div className="flex flex-col gap-4">
 
-                            <button className="bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700" onClick={()=>{navigate("/admin/applications")}}>
+                            <button className="bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700" onClick={() => { navigate("/admin/applications") }}>
                                 View All Applications
                             </button>
 
