@@ -1,226 +1,269 @@
 import { useEffect, useState } from "react";
 import api from "../utils/api";
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { useNavigate } from "react-router-dom";
-import Logo from "../components/Logo";
+import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 
 export default function AdminDashboard() {
-
-    const [stats, setStats] = useState({
-        total: 0,
-        approved: 0,
-        rejected: 0,
-        pending: 0
-    });
-
-    const chartData = [
-        { name: "Approved", value: stats.approved },
-        { name: "Rejected", value: stats.rejected },
-        { name: "Pending", value: stats.pending }
-    ];
-
-    const COLORS = ["#22c55e", "#ef4444", "#facc15"];
-
-    const navigate = useNavigate();
-
-    useEffect(() => {
-
-        const fetchStats = async () => {
-
-            try {
-                const res = await api.get("/admin/stats");
-                setStats(res.data);
-            } catch (error) {
-                console.error(error);
-            }
-
-        };
-
-        fetchStats();
-
-    }, []);
-
-    return (
-
-        <div className="min-h-screen bg-gray-100 flex">
-
-            {/* SIDEBAR */}
-
-            <div className="w-64 bg-white shadow-lg flex flex-col justify-between">
-
-                <div>
-
-                    <div className="p-6">
-                        <Logo size="md" />
-                    </div>
-
-                    <nav className="flex flex-col gap-2 p-4">
-
-                        <button className="text-left px-4 py-3 rounded-lg hover:bg-indigo-50">
-                            📊 Analytics
-                        </button>
-
-                        <button className="text-left px-4 py-3 rounded-lg hover:bg-indigo-50">
-                            📄 Loan Applications
-                        </button>
-
-                        <button className="text-left px-4 py-3 rounded-lg hover:bg-indigo-50">
-                            👥 Users
-                        </button>
-
-                        <button className="text-left px-4 py-3 rounded-lg hover:bg-indigo-50">
-                            ⚙️ Settings
-                        </button>
-
-                    </nav>
-
-                </div>
-
-                <div className="p-4 border-t text-sm text-gray-500">
-                    Score2Loan
-                </div>
-
-            </div>
-
-
-            {/* MAIN CONTENT */}
-
-            <div className="flex-1 p-8">
-
-                <h1 className="text-3xl font-bold mb-8">
-                    Admin Analytics Dashboard
-                </h1>
-
-
-                {/* STAT CARDS */}
-
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-
-                    <div className="bg-gradient-to-r from-indigo-500 to-blue-600 text-white p-6 rounded-xl shadow">
-
-                        <p>Total Applications</p>
-                        <h2 className="text-3xl font-bold">{stats.total}</h2>
-
-                    </div>
-
-                    <div className="bg-green-500 text-white p-6 rounded-xl shadow">
-
-                        <p>Approved</p>
-                        <h2 className="text-3xl font-bold">{stats.approved}</h2>
-
-                    </div>
-
-                    <div className="bg-red-500 text-white p-6 rounded-xl shadow">
-
-                        <p>Rejected</p>
-                        <h2 className="text-3xl font-bold">{stats.rejected}</h2>
-
-                    </div>
-
-                    <div className="bg-yellow-400 text-white p-6 rounded-xl shadow">
-
-                        <p>Pending</p>
-                        <h2 className="text-3xl font-bold">{stats.pending}</h2>
-
-                    </div>
-
-                </div>
-
-
-                {/* CHART + QUICK ACTIONS */}
-
-                <div className="grid md:grid-cols-2 gap-8 mb-10">
-
-                    {/* PIE CHART */}
-
-                    <div className="bg-white p-6 rounded-xl shadow">
-
-                        <h2 className="text-xl font-bold mb-4">
-                            Loan Status Distribution
-                        </h2>
-
-                        <div className="flex justify-center">
-
-                            <PieChart width={350} height={300}>
-
-                                <Pie
-                                    data={chartData}
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={100}
-                                    dataKey="value"
-                                    label
-                                >
-
-                                    {chartData.map((entry, index) => (
-                                        <Cell
-                                            key={index}
-                                            fill={COLORS[index]}
-                                        />
-                                    ))}
-
-                                </Pie>
-
-                                <Tooltip />
-                                <Legend />
-
-                            </PieChart>
-
-                        </div>
-
-                    </div>
-
-
-                    {/* QUICK ACTIONS */}
-
-                    <div className="bg-white p-6 rounded-xl shadow">
-
-                        <h2 className="text-xl font-bold mb-6">
-                            Admin Quick Actions
-                        </h2>
-
-                        <div className="flex flex-col gap-4">
-
-                            <button className="bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700" onClick={() => { navigate("/admin/applications") }}>
-                                View All Applications
-                            </button>
-
-                            <button className="bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
-                                Manage Users
-                            </button>
-
-                            <button className="bg-gray-800 text-white py-3 rounded-lg hover:bg-black">
-                                System Settings
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                {/* SYSTEM SUMMARY */}
-
-                <div className="bg-white p-6 rounded-xl shadow">
-
-                    <h2 className="text-xl font-bold mb-4">
-                        System Overview
-                    </h2>
-
-                    <p className="text-gray-600">
-                        This admin panel provides insights into loan applications,
-                        approval rates, and pending applications across the platform.
-                        Use the analytics and quick actions to manage the system efficiently.
-                    </p>
-
-                </div>
-
-            </div>
-
+  const [stats, setStats] = useState({
+    total: 0, approved: 0, rejected: 0, pending: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await api.get("/admin/stats");
+        setStats(res.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  const pieData = [
+    { name: "Approved", value: stats.approved },
+    { name: "Pending",  value: stats.pending  },
+    { name: "Rejected", value: stats.rejected },
+  ];
+
+  const barData = [
+    { name: "Total",    value: stats.total,    fill: "#f5c842" },
+    { name: "Approved", value: stats.approved, fill: "#1e9147" },
+    { name: "Pending",  value: stats.pending,  fill: "#f0a800" },
+    { name: "Rejected", value: stats.rejected, fill: "#e74c3c" },
+  ];
+
+  const COLORS = ["#1e9147", "#f0a800", "#e74c3c"];
+
+  const statCards = [
+    { label: "Total Applications", value: stats.total,    color: "#f5c842", bg: "#0a2818",  dark: true  },
+    { label: "Approved",           value: stats.approved, color: "#1a7a3f", bg: "white",    dark: false },
+    { label: "Pending",            value: stats.pending,  color: "#b86e00", bg: "white",    dark: false },
+    { label: "Rejected",           value: stats.rejected, color: "#c0392b", bg: "white",    dark: false },
+  ];
+
+  return (
+    <div style={{ background: "#f8faf9", minHeight: "100vh" }}>
+
+      {/* HERO */}
+      <div style={{
+        background: "linear-gradient(135deg, #0f3d22 0%, #0a2818 60%, #1a5c30 100%)",
+        padding: "32px 32px 28px",
+        borderBottom: "2px solid #d4920a"
+      }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <h1 style={{ fontSize: "24px", fontWeight: 500, color: "#f5c842", marginBottom: "6px" }}>
+              Admin Dashboard
+            </h1>
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>
+              Platform analytics and management overview
+            </p>
+          </div>
+          <button
+            onClick={() => navigate("/admin/applications")}
+            style={{
+              background: "#d4920a", color: "white",
+              padding: "10px 20px", borderRadius: "8px",
+              border: "none", cursor: "pointer",
+              fontSize: "13px", fontWeight: 500,
+            }}
+          >
+            View All Applications →
+          </button>
+        </div>
+      </div>
+
+      <div style={{ padding: "24px 32px" }}>
+
+        {/* STAT CARDS */}
+        {loading ? (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "12px", marginBottom: "24px" }}>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} style={{ height: "90px", borderRadius: "12px", background: "#e5e7eb" }} />
+            ))}
+          </div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "12px", marginBottom: "24px" }}>
+            {statCards.map((s, i) => (
+              <div key={i} style={{
+                background: s.bg, borderRadius: "12px",
+                border: "2px solid #d4920a", padding: "20px",
+              }}>
+                <p style={{ fontSize: "11px", color: s.dark ? "rgba(255,255,255,0.5)" : "#6b7280", marginBottom: "8px" }}>
+                  {s.label}
+                </p>
+                <p style={{ fontSize: "30px", fontWeight: 600, color: s.color }}>
+                  {s.value}
+                </p>
+                {i === 0 && stats.total > 0 && (
+                  <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", marginTop: "4px" }}>
+                    {Math.round((stats.approved / stats.total) * 100)}% approval rate
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* CHARTS */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "20px" }}>
+
+          {/* PIE CHART */}
+          <div style={{
+            background: "white", borderRadius: "12px",
+            border: "2px solid #d4920a", padding: "24px"
+          }}>
+            <h2 style={{ fontSize: "14px", fontWeight: 500, color: "#0a2818", marginBottom: "4px" }}>
+              Application Status Distribution
+            </h2>
+            <p style={{ fontSize: "12px", color: "#9ca3af", marginBottom: "16px" }}>
+              Overview of all loan applications
+            </p>
+            {stats.total === 0 ? (
+              <div style={{ height: "250px", display: "flex", alignItems: "center", justifyContent: "center", color: "#9ca3af" }}>
+                <p>No data yet</p>
+              </div>
+            ) : (
+              <PieChart width={320} height={260}>
+                <Pie
+                  data={pieData} cx="50%" cy="50%"
+                  outerRadius={90} dataKey="value"
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                >
+                  {pieData.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            )}
+          </div>
+
+          {/* BAR CHART */}
+          <div style={{
+            background: "white", borderRadius: "12px",
+            border: "2px solid #d4920a", padding: "24px"
+          }}>
+            <h2 style={{ fontSize: "14px", fontWeight: 500, color: "#0a2818", marginBottom: "4px" }}>
+              Applications Overview
+            </h2>
+            <p style={{ fontSize: "12px", color: "#9ca3af", marginBottom: "16px" }}>
+              Total vs status breakdown
+            </p>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={barData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#6b7280" }} />
+                <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} />
+                <Tooltip />
+                <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                  {barData.map((entry, i) => (
+                    <Cell key={i} fill={entry.fill} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-    );
+        {/* BOTTOM — STATS + QUICK ACTIONS */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
 
+          {/* APPROVAL RATE */}
+          <div style={{
+            background: "white", borderRadius: "12px",
+            border: "2px solid #d4920a", padding: "24px"
+          }}>
+            <h2 style={{ fontSize: "14px", fontWeight: 500, color: "#0a2818", marginBottom: "16px" }}>
+              Platform Metrics
+            </h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+              {[
+                { label: "Approval Rate",  value: stats.total ? `${Math.round((stats.approved / stats.total) * 100)}%` : "0%",  color: "#1a7a3f", width: stats.total ? `${(stats.approved / stats.total) * 100}%` : "0%",  bg: "#d4f5e0" },
+                { label: "Rejection Rate", value: stats.total ? `${Math.round((stats.rejected / stats.total) * 100)}%` : "0%",  color: "#c0392b", width: stats.total ? `${(stats.rejected / stats.total) * 100}%` : "0%",  bg: "#fdecea" },
+                { label: "Pending Rate",   value: stats.total ? `${Math.round((stats.pending  / stats.total) * 100)}%` : "0%",  color: "#b86e00", width: stats.total ? `${(stats.pending  / stats.total) * 100}%` : "0%",  bg: "#fef8e0" },
+              ].map((m, i) => (
+                <div key={i}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+                    <span style={{ fontSize: "12px", color: "#6b7280" }}>{m.label}</span>
+                    <span style={{ fontSize: "13px", fontWeight: 600, color: m.color }}>{m.value}</span>
+                  </div>
+                  <div style={{ background: "#f3f4f6", borderRadius: "4px", height: "7px" }}>
+                    <div style={{
+                      height: "7px", borderRadius: "4px",
+                      background: m.color, width: m.width,
+                      transition: "width 0.5s"
+                    }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* QUICK ACTIONS */}
+          <div style={{
+            background: "#0a2818", borderRadius: "12px",
+            border: "2px solid #d4920a", padding: "24px"
+          }}>
+            <h2 style={{ fontSize: "14px", fontWeight: 500, color: "#f5c842", marginBottom: "16px" }}>
+              Quick Actions
+            </h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {[
+                { label: "📄 Review Pending Applications", path: "/admin/applications", count: stats.pending },
+                { label: "🏦 Manage Bank Offers",          path: "/admin/applications", count: null },
+                { label: "👥 View All Applications",       path: "/admin/applications", count: stats.total },
+              ].map((action, i) => (
+                <button
+                  key={i}
+                  onClick={() => navigate(action.path)}
+                  style={{
+                    width: "100%", padding: "12px 16px",
+                    background: "rgba(245,200,66,0.08)",
+                    color: "rgba(255,255,255,0.85)",
+                    borderRadius: "8px",
+                    border: "0.5px solid rgba(245,200,66,0.2)",
+                    cursor: "pointer", fontSize: "13px",
+                    display: "flex", justifyContent: "space-between",
+                    alignItems: "center", textAlign: "left",
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(245,200,66,0.15)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "rgba(245,200,66,0.08)"}
+                >
+                  <span>{action.label}</span>
+                  {action.count !== null && (
+                    <span style={{
+                      background: "#d4920a", color: "white",
+                      fontSize: "11px", fontWeight: 600,
+                      padding: "2px 8px", borderRadius: "20px"
+                    }}>
+                      {action.count}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Summary */}
+            <div style={{
+              marginTop: "16px", padding: "12px 16px",
+              background: "rgba(255,255,255,0.04)",
+              borderRadius: "8px", border: "0.5px solid rgba(255,255,255,0.08)"
+            }}>
+              <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.35)", lineHeight: "1.6" }}>
+                This admin panel provides insights into loan applications,
+                approval rates, and pending reviews across the platform.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
-

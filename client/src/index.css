@@ -1,3 +1,19 @@
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --green-900: #0a2818;
+  --green-800: #0f3d22;
+  --green-700: #155c30;
+  --green-600: #1a7a3f;
+  --green-500: #1e9147;
+  --green-100: #d4f5e0;
+  --gold-700:  #b86e00;
+  --gold-500:  #d4920a;
+  --gold-400:  #f0a800;
+  --gold-300:  #f5c842;
+  --gold-100:  #fef8e0;
+}
