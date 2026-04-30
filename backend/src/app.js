@@ -44,7 +44,7 @@ const PORT = process.env.PORT || 5005;
 
 // Connect DB then start server
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  app.listen(PORT, "0.0.0.0", () => {  // ✅ "0.0.0.0" add karo
     console.log(`Server running on Port ${PORT}`);
   });
 });
