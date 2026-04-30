@@ -14,6 +14,7 @@ import Layout from "./components/Layout";
 import { Toaster } from "react-hot-toast";
 import EmiCalculator from "./pages/EmiCalculator";
 import CreditScore from "./pages/CreditScore";
+import AdminUsers from "./pages/AdminUsers";
 
 export default function App() {
   return (
@@ -109,6 +110,17 @@ export default function App() {
                 <CreditScore />
               </Layout>
             </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/admin/users"
+          element={
+            <AdminRoute>
+              <Layout>
+                <AdminUsers />
+              </Layout>
+            </AdminRoute>
           }
         />
 
