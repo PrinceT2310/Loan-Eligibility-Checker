@@ -7,6 +7,7 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
+  const [deleteModal, setDeleteModal] = useState(null);
 
   const fetchUsers = async () => {
     try {
@@ -20,6 +21,17 @@ export default function AdminUsers() {
   };
 
   useEffect(() => { fetchUsers(); }, []);
+
+  const confirmDelete = async () => {
+    try {
+      await api.delete(`/admin/users/${deleteModal}`);
+      toast.success("User deleted successfully!");
+      setDeleteModal(null);
+      fetchUsers();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Delete failed");
+    }
+  };
 
   const filteredUsers = users
     .filter(u => filter === "All" ? true : u.role === filter.toLowerCase())
@@ -47,10 +59,9 @@ export default function AdminUsers() {
               View and manage all registered users
             </p>
           </div>
-          {/* Stats */}
           <div style={{ display: "flex", gap: "12px" }}>
             {[
-              { label: "Total",  value: users.length,                              color: "#f5c842" },
+              { label: "Total",  value: users.length,                                color: "#f5c842" },
               { label: "Users",  value: users.filter(u => u.role === "user").length,  color: "#1e9147" },
               { label: "Admins", value: users.filter(u => u.role === "admin").length, color: "#f0a800" },
             ].map((s, i) => (
@@ -110,7 +121,7 @@ export default function AdminUsers() {
             {[...Array(4)].map((_, i) => (
               <div key={i} style={{
                 height: "80px", borderRadius: "12px",
-                background: "#e5e7eb", animation: "pulse 1.5s infinite"
+                background: "#e5e7eb",
               }} />
             ))}
           </div>
@@ -137,11 +148,12 @@ export default function AdminUsers() {
           }}>
             {/* Table Header */}
             <div style={{
-              display: "grid", gridTemplateColumns: "2fr 2fr 1fr 1fr 1fr",
+              display: "grid",
+              gridTemplateColumns: "2fr 2fr 1fr 1fr 1fr auto",
               padding: "12px 20px", background: "#0a2818",
               borderBottom: "2px solid #d4920a"
             }}>
-              {["User", "Email", "Role", "Credit Score", "Joined"].map((h, i) => (
+              {["User", "Email", "Role", "Credit Score", "Joined", "Action"].map((h, i) => (
                 <span key={i} style={{ fontSize: "11px", fontWeight: 600, color: "#f5c842", letterSpacing: "0.5px" }}>
                   {h.toUpperCase()}
                 </span>
@@ -153,7 +165,8 @@ export default function AdminUsers() {
               <div
                 key={user._id}
                 style={{
-                  display: "grid", gridTemplateColumns: "2fr 2fr 1fr 1fr 1fr",
+                  display: "grid",
+                  gridTemplateColumns: "2fr 2fr 1fr 1fr 1fr auto",
                   padding: "14px 20px", alignItems: "center",
                   borderBottom: i < filteredUsers.length - 1 ? "0.5px solid #fef3c7" : "none",
                   background: i % 2 === 0 ? "white" : "#fafaf8",
@@ -222,11 +235,81 @@ export default function AdminUsers() {
                     day: "numeric", month: "short", year: "numeric"
                   }) : "—"}
                 </span>
+
+                {/* Delete Button */}
+                {user.role !== "admin" ? (
+                  <button
+                    onClick={() => setDeleteModal(user._id)}
+                    style={{
+                      background: "#fdecea", color: "#c0392b",
+                      border: "1px solid #f5c6c6",
+                      padding: "6px 12px", borderRadius: "6px",
+                      cursor: "pointer", fontSize: "11px", fontWeight: 500,
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = "#c0392b20"}
+                    onMouseLeave={e => e.currentTarget.style.background = "#fdecea"}
+                  >
+                    🗑️ Delete
+                  </button>
+                ) : (
+                  <span style={{ fontSize: "11px", color: "#9ca3af" }}>—</span>
+                )}
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* DELETE MODAL */}
+      {deleteModal && (
+        <div style={{
+          position: "fixed", inset: 0,
+          background: "rgba(0,0,0,0.6)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          zIndex: 100,
+        }}>
+          <div style={{
+            background: "white", borderRadius: "16px",
+            border: "2px solid #d4920a",
+            padding: "32px", width: "100%", maxWidth: "400px",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
+          }}>
+            <div style={{ textAlign: "center", marginBottom: "16px" }}>
+              <p style={{ fontSize: "40px" }}>🗑️</p>
+            </div>
+            <h2 style={{ fontSize: "18px", fontWeight: 600, color: "#0a2818", marginBottom: "8px", textAlign: "center" }}>
+              Delete User?
+            </h2>
+            <p style={{ fontSize: "13px", color: "#6b7280", marginBottom: "24px", textAlign: "center" }}>
+              Are you sure? This action cannot be undone.
+            </p>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                onClick={() => setDeleteModal(null)}
+                style={{
+                  flex: 1, padding: "11px",
+                  border: "1.5px solid #d4920a",
+                  borderRadius: "8px", background: "white",
+                  color: "#6b7280", cursor: "pointer", fontSize: "13px",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                style={{
+                  flex: 1, padding: "11px",
+                  background: "#c0392b", color: "white",
+                  borderRadius: "8px", border: "none",
+                  cursor: "pointer", fontSize: "13px", fontWeight: 500,
+                }}
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
