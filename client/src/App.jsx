@@ -15,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import EmiCalculator from "./pages/EmiCalculator";
 import CreditScore from "./pages/CreditScore";
 import AdminUsers from "./pages/AdminUsers";
+import AdminBanks from "./pages/AdminBanks";
 
 export default function App() {
   return (
@@ -112,13 +113,24 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/admin/users"
           element={
             <AdminRoute>
               <Layout>
                 <AdminUsers />
+              </Layout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/banks"
+          element={
+            <AdminRoute>
+              <Layout>
+                <AdminBanks />
               </Layout>
             </AdminRoute>
           }

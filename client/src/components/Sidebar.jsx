@@ -13,6 +13,7 @@ import {
   Users,
   BarChart3,
   Home,
+  Building2
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
@@ -43,6 +44,7 @@ const adminItems = [
       { icon: BarChart3,   name: "Admin Dashboard", path: "/admin/dashboard" },
       { icon: ShieldCheck, name: "Applications",    path: "/admin/applications" },
       { icon: Users,       name: "Manage Users",    path: "/admin/users" },
+      { icon: Building2, name: "Bank Management", path: "/admin/banks" },
     ],
   },
 ];
